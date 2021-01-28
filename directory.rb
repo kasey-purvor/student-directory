@@ -1,6 +1,6 @@
 def input_students
   puts "Please input student names"
-  puts "To exit press return twice"  
+  puts "To finish entering names, enter empty name value"  
   students = []
   name = gets.chomp
   until name.empty?
@@ -26,8 +26,26 @@ def print_footer(student_arr)
   puts "Overall, we have #{student_arr.length} great students"
 end
 
-students = input_students 
-print_header
-print_names(students)
-print_footer(students)
+def interactive_menue
+  students = []
+  loop do
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. Exit the program"
+    command = gets.chomp
+    case command
+      when "1" 
+        students += input_students
+      when "2"
+        print_header
+        print_names(students)
+        print_footer(students)
+      when "9" 
+        break
+      else
+        puts "Unrecognised command, please try again" 
+    end
+  end
+end
 
+interactive_menue
