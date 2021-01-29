@@ -2,11 +2,11 @@
 
 def input_students
   puts "Please input student names. \n To finish entering names, enter 'stop'"  
-  name = gets.chomp
+  name = STDIN.gets.chomp
   until name == "stop"
     @students << {name: name, cohort: :november}
     puts "We now have #{@students.length} students."
-    name = gets.chomp
+    name = STDIN.gets.chomp
   end
 end
 
@@ -48,7 +48,7 @@ def process(command)
     when "9" 
       exit
     else
-        puts "Unrecognised command, please try again"  
+      puts "Unrecognised command, please try again"  
   end 
 end
 
@@ -62,19 +62,30 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each{ |line| 
     name, cohort = line.chomp.split(",")
     @students << {name: name, cohort: cohort.to_sym}
   }
 end
-    
+
+def try_load_students
+  filename = ARGV.first
+  return nil if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+  else
+    puts "Sorry, #{filename} does not exist"
+    exit
+  end  
+end  
+   
 def interactive_menue
   loop do
     print_menue
-    process(gets.chomp)    
+    process(STDIN.gets.chomp)    
   end
 end
-
+try_load_students
 interactive_menue
