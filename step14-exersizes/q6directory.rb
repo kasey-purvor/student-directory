@@ -51,11 +51,11 @@ def process(command)
       print_names(@students)
       print_footer(@students)
     when "3"
-      puts "Enter filename if desired, type 'def' to use students.csv otherwise"
+      puts "Enter filename if desired, type 'def' to use default students.csv otherwise"
       filename = STDIN.gets.chomp
       filename == "def" ? save_students() : save_students(filename)
     when "4"
-      puts "Enter filename to load names from, type 'def' to load fefault students.csv otherwise"
+      puts "Enter filename to load names from, type 'def' to load default students.csv otherwise"
       filename = STDIN.gets.chomp
       filename == "def" ? load_students() : load_students(filename) 
     when "9" 
