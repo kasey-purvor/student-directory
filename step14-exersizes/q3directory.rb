@@ -1,11 +1,19 @@
 @students = []
+# method that stores name and cohort information in the @students array 
+def store_info(name, cohort)
+  if cohort.empty? ? @students << {name: name, cohort: :november} : @students << {name: name, cohort: cohort.to_sym}
+  end
+end
 # aks user for input names and stores these in @students array   
 def input_students
   puts "Please input student names. \n To finish entering names, enter 'stop'"  
   name = STDIN.gets.chomp
   until name == "stop"
-    @students << {name: name, cohort: :november}
+    puts "Please input cohort"
+    cohort = STDIN.gets.chomp
+    store_info(name, cohort)
     puts "We now have #{@students.length} students."
+    puts "Please input another name"
     name = STDIN.gets.chomp
   end
 end
@@ -51,7 +59,7 @@ def process(command)
       puts "Unrecognised command, please try again"  
   end 
 end
-#saves the @student array into a file in CSV format 
+#saves the @students array into a file in CSV format 
 def save_students
   file = File.open("students.csv", "w") 
   @students.each { |student_hsh| 
@@ -65,15 +73,17 @@ end
 def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each{ |line| 
-    name, cohort = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym}
+  name, cohort = line.chomp.split(",")
+  store_info(name, cohort) 
   }
 end
 # attempts to load student information from an external file, specified in the command prompt. 
+# if not input is given in the command prompt it loads its default from students.csv 
 def try_load_students
   filename = ARGV.first
-  return nil if filename.nil?
-  if File.exists?(filename)
+  if filename.nil?
+    load_students()
+  elsif File.exists?(filename)
     load_students(filename)
   else
     puts "Sorry, #{filename} does not exist"
